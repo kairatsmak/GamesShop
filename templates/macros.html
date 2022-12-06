@@ -1,0 +1,34 @@
+{% macro render_games(games, button_type=1) %}
+<div class="game__panel">
+    {% for item in games %}
+    <div class="game__card">
+        <div class="game__card__left">
+            <img src="{{url_for('static', filename='img/' + item['image_path'])}}" alt="">
+        </div>
+        <div class="game__card__right">
+            <h2>{{item['title']}}</h2>
+            <p>{{item['description']}}</p>
+            <p><strong>Платформа: </strong>
+                {% for i in item['platforms'] %}
+                    <span>{{i[0]}}</span>
+                {% endfor %}
+            </p>
+            <p><strong>Жанр: </strong>
+                {% for i in item['genres'] %}
+                    <span>{{i[0]}}</span>
+                {% endfor %}
+            </p>    
+            <p><strong>Издатель: </strong>{{item['publisher']}}</p>  
+            <p><strong>Язык: </strong>{{item['language']}}</p>  
+            <p><strong>Дата выхода: </strong><span>{{item['release_date'].strftime('%d.%m.%Y')}}г.</span></p>
+            <div class="cost">{{item['cost']}} тг.</div>
+            {% if button_type == 1 %}
+            <div class="button">
+                <button>Добавить в корзину</button>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endmacro %}

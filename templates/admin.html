@@ -1,0 +1,97 @@
+{% from 'macros.html' import render_games %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GamesShop - Administrator's panel</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/admin.css')}}">
+</head>
+
+<body>
+    <div class="content">
+        <form class='edit__form' action="/admin" method="post" enctype=multipart/form-data>
+            <h2>Игра</h2>
+            <input type="hidden" name="id" value="{{game['id']}}">
+            <div class="row">
+                <div class="col">
+                    <label for="title">Название:</label>
+                    <input type="text" name="title" id="title" value="{{game['title']}}" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <label for="description">Описание:</label>
+                    <textarea name="description" id="description" cols="30" rows="10">{{game['description']}}</textarea>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <label for="cost">Цена:</label>
+                    <input type="number" name="cost" id="cost" value="{{game['cost']}}">
+                </div>
+                <div class="col">
+                    <label for="release_date">Дата выхода:</label>
+                    <input type="date" name="release_date" id="release_date" value="{{game['release_date']}}">
+                </div>
+                <div class="col">
+                    <label for="image_path">Изображение:</label>
+                    <input type="file" name="image_path" id="image_path" accept=".jpg, .jpeg, .png">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <fieldset>
+                        <legend>Платформа</legend>
+                        {% for item in platforms %}
+                        <input type="checkbox" name="platforms"
+                            value="{{item['id']}}">{{item['title']}}<br>
+                        {% endfor %}
+                    </fieldset>
+                </div>
+                <div class="col">
+                    <fieldset>
+                        <legend>Жанр</legend>
+                        {% for item in genres %}
+                        <input type="checkbox" name="genres"
+                            value="{{item['id']}}">{{item['title']}}<br>
+                        {% endfor %}
+                    </fieldset>
+                </div>
+                <div class="col">
+                    <fieldset>
+                        <legend>Издатель</legend>
+                        <select name="publisher_id" id="publisher_id">
+                            {% for item in publishers %}
+                            <option value="{{item['id']}}">{{item['title']}}</option>
+                            {% endfor %}
+                        </select>
+                    </fieldset>
+                </div>
+                <div class="col">
+                    <fieldset>
+                        <legend>Язык</legend>
+                        <select name="language_id" id="language_id">
+                            {% for item in languages %}
+                                <option value="{{item['id']}}">{{item['title']}}</option>
+                            {% endfor %}
+                        </select>    
+                    </fieldset>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <input type="submit" value="Сохранть">
+                </div>
+            </div>
+        </form>
+        <div class="game__list">
+            <h1>Список игр</h1>
+            {{ render_games(games, 2) }}
+        </div>
+    </div>
+</body>
+
+</html>

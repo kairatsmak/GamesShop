@@ -1,0 +1,115 @@
+* {
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+}
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-image: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)), url(../img/fon.jpg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+.content {
+    background-color: rgb(255, 220, 206);
+    width: 80%;
+    height: 100vh;
+    overflow: scroll;
+    border: 2px solid coral;
+    margin-left: auto;
+    margin-right: auto;
+}
+.edit__form {
+    border: 1px solid black;
+    padding: 10px;
+}
+.edit__form h2 {
+    text-align: center;
+}
+.edit__form input[type='checkbox'] {
+    font-size: 10pt;
+    padding: 5px;
+    margin-left: 5px;
+    margin-top: 2.5px;
+    margin-bottom: 2.5px;
+}
+.edit__form input[type='text'], .edit__form textarea, .edit__form select, .edit__form input[type='date'], .edit__form input[type='number'] {
+    font-size: 12pt;
+    padding: 5px;
+    width: 100%;
+}
+.edit__form .btn {
+    align-self: center;
+    padding: 5px;
+}
+.edit__form input[type='submit'] {
+    background-color: rgb(247, 69, 4);
+    color: white;
+    border: none;
+    padding: 5px;
+    align-self: center;
+    font-size: 14pt;
+    cursor: pointer;
+}
+.edit__form input[type='file'] {
+    padding: 5px;
+    font-size: 14pt;
+    cursor: pointer;
+}
+.edit__form legend {
+    font-weight: 700;
+}
+.row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+    height: 100%;
+}
+.col {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 10px;
+}
+.col fieldset {
+    border: none;
+}
+.game__list h1 {
+    margin-top: 20px;
+    text-align: center;
+}
+.game__panel {
+    width: 100%;
+    height: auto;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    margin-left: 20px;
+    margin-top: 10px;
+    margin-bottom: 100px;
+}
+.game__card {
+    width: 100%;
+    height: 350px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin-bottom: 25px;
+}
+.game__card__left img {
+    width: 400px;
+    height: 350px;
+}
+.game__card__right {
+    width: 100%;
+    margin-left: 10px;
+    display: flex;
+    flex-direction: column;
+}
+.game__card__right h2 {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.game__card__right p {
+    font-size: 13pt;
+}

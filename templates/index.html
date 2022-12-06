@@ -1,0 +1,74 @@
+{% from "macros.html" import render_games %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GamesShop</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}">
+</head>
+<body>
+    <div class="content">
+        <header>
+            <div class="logo">
+                GamesShop
+            </div>
+            <ul class="menu">
+                <li>Главная</li>
+                <li>Новинки</li>
+                <li>Скидки</li>
+                <li>Контакты</li>
+            </ul>
+            <div class="basket__panel">
+                <div>🛒 Корзина</div>
+            </div>
+        </header>
+        <main>
+            <div class="find__panel">
+                <form action="\games_shop\search">
+                    <div class="row">
+                        <input type="text" name="title" value="{{search['title']}}" placeholder="Название игры">
+                    </div>
+                    <div class="row">
+                        <fieldset>
+                            <legend>Платформа</legend>
+                            {% for item in platforms %}
+                            <input type="checkbox" name="platform_id" id="platform_{{item['id']}}" value="{{item['id']}}">{{item['title']}}<br>
+                            {% endfor %}
+                        </fieldset>
+                    </div>
+                    <div class="row">
+                        <fieldset>
+                            <legend>Жанр</legend>
+                            {% for item in genres %}
+                            <input type="checkbox" name="genre_id" id="genre_{{item['id']}}" value="{{item['id']}}">{{item['title']}}<br>
+                            {% endfor %}
+                        </fieldset>
+                    </div>
+                    <div class="row">
+                        <fieldset>
+                            <legend>Издатель</legend>
+                            {% for item in publishers %}
+                            <input type="checkbox" name="publisher_id" id="publisher_{{item['id']}}" value="{{item['id']}}">{{item['title']}}<br>
+                            {% endfor %}
+                        </fieldset>
+                    </div>
+                    <div class="row">
+                        <fieldset>
+                            <legend>Язык</legend>
+                            {% for item in languages %}
+                            <input type="checkbox" name="language_id" id="language_{{item['id']}}" value="{{item['id']}}">{{item['title']}}<br>
+                            {% endfor %}
+                        </fieldset>
+                    </div>
+                    <div class="row">
+                        <input type="submit" value="Найти">
+                    </div>
+                </form>
+            </div>
+            {{ render_games(games) }}         
+        </main>
+    </div>
+</body>
+</html>
