@@ -38,11 +38,14 @@ body {
     padding: 5px;
     width: 100%;
 }
+.edit__form input[type='date'] {
+    width: 150px;
+}
 .edit__form .btn {
     align-self: center;
     padding: 5px;
 }
-.edit__form input[type='submit'] {
+.edit__form input[type='submit'], button {
     background-color: rgb(247, 69, 4);
     color: white;
     border: none;

@@ -15,6 +15,7 @@
         <form class='edit__form' action="/admin" method="post" enctype=multipart/form-data>
             <h2>Игра</h2>
             <input type="hidden" name="id" value="{{game['id']}}">
+            <input type="hidden" name="image_path_default" value="{{game['image_path']}}">
             <div class="row">
                 <div class="col">
                     <label for="title">Название:</label>
@@ -47,7 +48,7 @@
                         <legend>Платформа</legend>
                         {% for item in platforms %}
                         <input type="checkbox" name="platforms"
-                            value="{{item['id']}}">{{item['title']}}<br>
+                            value="{{item['id']}}" {{"checked" if item['id'] in game['platforms']}}>{{item['title']}}<br>
                         {% endfor %}
                     </fieldset>
                 </div>
@@ -56,7 +57,7 @@
                         <legend>Жанр</legend>
                         {% for item in genres %}
                         <input type="checkbox" name="genres"
-                            value="{{item['id']}}">{{item['title']}}<br>
+                            value="{{item['id']}}" {{"checked" if item['id'] in game['genres']}}>{{item['title']}}<br>
                         {% endfor %}
                     </fieldset>
                 </div>
@@ -65,7 +66,7 @@
                         <legend>Издатель</legend>
                         <select name="publisher_id" id="publisher_id">
                             {% for item in publishers %}
-                            <option value="{{item['id']}}">{{item['title']}}</option>
+                            <option value="{{item['id']}}" {{"selected" if item['id'] == game['publisher_id']}}>{{item['title']}}</option>
                             {% endfor %}
                         </select>
                     </fieldset>
@@ -75,7 +76,7 @@
                         <legend>Язык</legend>
                         <select name="language_id" id="language_id">
                             {% for item in languages %}
-                                <option value="{{item['id']}}">{{item['title']}}</option>
+                                <option value="{{item['id']}}" {{"selected" if item['id'] == game['language_id']}}>{{item['title']}}</option>
                             {% endfor %}
                         </select>    
                     </fieldset>
@@ -83,7 +84,7 @@
             </div>
             <div class="row">
                 <div class="col">
-                    <input type="submit" value="Сохранть">
+                    <input type="submit" value="Сохранить">
                 </div>
             </div>
         </form>

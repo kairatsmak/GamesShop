@@ -26,15 +26,15 @@
         </header>
         <main>
             <div class="find__panel">
-                <form action="\games_shop\search">
+                <form action="\" method="get">
                     <div class="row">
-                        <input type="text" name="title" value="{{search['title']}}" placeholder="Название игры">
+                        <input type="text" name="title" value="{{search['title'] if search['title'] else '' }}" placeholder="Название игры">
                     </div>
                     <div class="row">
                         <fieldset>
                             <legend>Платформа</legend>
                             {% for item in platforms %}
-                            <input type="checkbox" name="platform_id" id="platform_{{item['id']}}" value="{{item['id']}}">{{item['title']}}<br>
+                            <input type="checkbox" name="platforms" value="{{item['title']}}"{{"checked" if item['title'] in search['platforms']}}>{{item['title']}}<br>
                             {% endfor %}
                         </fieldset>
                     </div>
@@ -42,7 +42,7 @@
                         <fieldset>
                             <legend>Жанр</legend>
                             {% for item in genres %}
-                            <input type="checkbox" name="genre_id" id="genre_{{item['id']}}" value="{{item['id']}}">{{item['title']}}<br>
+                            <input type="checkbox" name="genres" value="{{item['title']}}"{{"checked" if item['title'] in search['genres']}}>{{item['title']}}<br>
                             {% endfor %}
                         </fieldset>
                     </div>
@@ -50,7 +50,7 @@
                         <fieldset>
                             <legend>Издатель</legend>
                             {% for item in publishers %}
-                            <input type="checkbox" name="publisher_id" id="publisher_{{item['id']}}" value="{{item['id']}}">{{item['title']}}<br>
+                            <input type="checkbox" name="publishers" value="{{item['title']}}" {{"checked" if item['title'] in search['publishers']}}>{{item['title']}}<br>
                             {% endfor %}
                         </fieldset>
                     </div>
@@ -58,7 +58,7 @@
                         <fieldset>
                             <legend>Язык</legend>
                             {% for item in languages %}
-                            <input type="checkbox" name="language_id" id="language_{{item['id']}}" value="{{item['id']}}">{{item['title']}}<br>
+                            <input type="checkbox" name="languages" value="{{item['title']}}" {{"checked" if item['title'] in search['languages']}}>{{item['title']}}<br>
                             {% endfor %}
                         </fieldset>
                     </div>
@@ -67,7 +67,7 @@
                     </div>
                 </form>
             </div>
-            {{ render_games(games) }}         
+            {{ render_games(games, 1) }}         
         </main>
     </div>
 </body>

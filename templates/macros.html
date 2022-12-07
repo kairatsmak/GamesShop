@@ -1,21 +1,21 @@
-{% macro render_games(games, button_type=1) %}
+{% macro render_games(games, button_type) %}
 <div class="game__panel">
     {% for item in games %}
     <div class="game__card">
         <div class="game__card__left">
-            <img src="{{url_for('static', filename='img/' + item['image_path'])}}" alt="">
+            <img src="{{url_for('static', filename='img/' + (item['image_path'] if item['image_path'] else 'default_img.jpg'))}}" alt="">
         </div>
         <div class="game__card__right">
             <h2>{{item['title']}}</h2>
             <p>{{item['description']}}</p>
             <p><strong>Платформа: </strong>
                 {% for i in item['platforms'] %}
-                    <span>{{i[0]}}</span>
+                    <span>{{i}}</span>
                 {% endfor %}
             </p>
             <p><strong>Жанр: </strong>
                 {% for i in item['genres'] %}
-                    <span>{{i[0]}}</span>
+                    <span>{{i}}</span>
                 {% endfor %}
             </p>    
             <p><strong>Издатель: </strong>{{item['publisher']}}</p>  
@@ -25,6 +25,11 @@
             {% if button_type == 1 %}
             <div class="button">
                 <button>Добавить в корзину</button>
+            </div>
+            {% elif button_type == 2 %}
+            <div>
+                <a href="/admin/get/{{item['id']}}"><button>Редактировать</button></a>
+                <a href="/admin/delete/{{item['id']}}"><button>Удалить</button></a>
             </div>
             {% endif %}
         </div>

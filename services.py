@@ -13,6 +13,7 @@ from config import (
     PASSWORD,
     PORT,
     USER,
+    DICT_TABLES,
 )
 
 
@@ -44,88 +45,34 @@ class Connection:
 
         return cls.instance
 
-    def get_genre_list(self) -> list[dict]:
-        data: list[dict] = []
+    def get_dicts(self) -> dict:
+        dicts: dict = {}
+
+        for table_name in DICT_TABLES:
+            data: list[dict] = []
         
-        with self.connection.cursor() as cur:
-            cur.execute("""
-                SELECT id, title  FROM genres;
-            """)
+            with self.connection.cursor() as cur:
+                cur.execute(f"""
+                    SELECT id, title  FROM {table_name};
+                """)
 
-            rows = cur.fetchall()
-            
-            for row in rows:
-                g = {}
-
-                g['id'] = row[0]
-                g['title'] = row[1]
+                rows = cur.fetchall()
                 
-                data.append(g)
+                for row in rows:
+                    g = {}
 
-        return data  
+                    g['id'] = row[0]
+                    g['title'] = row[1]
+                    
+                    data.append(g)
 
-    def get_platform_list(self) -> list[dict]:
-        data: list[dict] = []
-        
-        with self.connection.cursor() as cur:
-            cur.execute("""
-                SELECT id, title  FROM platforms;
-            """)
+            dicts[table_name] = data  
 
-            rows = cur.fetchall()
-            
-            for row in rows:
-                g = {}
-
-                g['id'] = row[0]
-                g['title'] = row[1]
-                
-                data.append(g)
-
-        return data  
-
-    def get_publisher_list(self) -> list[dict]:
-        data: list[dict] = []
-        
-        with self.connection.cursor() as cur:
-            cur.execute("""
-                SELECT id, title  FROM publishers;
-            """)
-
-            rows = cur.fetchall()
-            
-            for row in rows:
-                g = {}
-
-                g['id'] = row[0]
-                g['title'] = row[1]
-                
-                data.append(g)
-
-        return data                
-    
-    def get_language_list(self) -> list[dict]:
-        data: list[dict] = []
-        
-        with self.connection.cursor() as cur:
-            cur.execute("""
-                SELECT id, title  FROM languages;
-            """)
-
-            rows = cur.fetchall()
-            
-            for row in rows:
-                g = {}
-
-                g['id'] = row[0]
-                g['title'] = row[1]
-                
-                data.append(g)
-
-        return data  
+        return dicts    
 
     def get_games_list(self) -> list[dict]:
         data: list[dict] = []
+        
         with self.connection.cursor() as cur:
             cur.execute("""
                 SELECT g.id, g.title, g.description, g.cost, g.image_path, g.release_date, publishers.title, languages.title  
@@ -133,7 +80,9 @@ class Connection:
                 INNER JOIN publishers ON publishers.id = g.publisher_id
                 INNER JOIN languages ON languages.id = g.language_id
             """)
+            
             rows = cur.fetchall()
+            
             for row in rows:
                 g = {}
 
@@ -146,25 +95,78 @@ class Connection:
                 g['publisher'] = row[6]
                 g['language'] = row[7]
 
+                g['genres'] = []    
                 with self.connection.cursor() as cur:
                     cur.execute("""
                         SELECT genres.title FROM game_genre AS t 
                         INNER JOIN genres ON genres.id = t.genre_id
                         WHERE t.game_id = %s
                     """, (g['id'], ))   
-                    g['genres'] = cur.fetchall()
+                    
+                    rows = cur.fetchall()
 
+                    for row in rows:
+                        g['genres'].append(row[0])
+
+                g['platforms'] = []
                 with self.connection.cursor() as cur:
                     cur.execute("""
                         SELECT platforms.title FROM game_platform AS t
                         INNER JOIN platforms ON platforms.id = t.platform_id
                         WHERE t.game_id = %s
                     """, (g['id'], ))   
-                    g['platforms'] = cur.fetchall()
+                    
+                    rows = cur.fetchall()
+
+                    for row in rows:
+                        g['platforms'].append(row[0])
 
                 data.append(g)         
 
         return data
+
+    def get_game(self, id: int) -> dict:
+        g = {}
+        
+        with self.connection.cursor() as cur:
+            cur.execute("""
+                SELECT * FROM games WHERE id = %s
+            """, (id, ))
+
+            row = cur.fetchone()
+
+            g['id'] = row[0]
+            g['title'] = row[1]
+            g['description'] = row[2]
+            g['cost'] = row[3]
+            g['image_path'] = row[4]
+            g['release_date'] = row[5]
+            g['publisher_id'] = row[6]
+            g['language_id'] = row[7]
+
+            g['genres'] = []
+            with self.connection.cursor() as cur:
+                cur.execute("""
+                    SELECT genre_id FROM game_genre WHERE game_id = %s
+                """, (id, ))
+
+                rows = cur.fetchall()
+
+                for row in rows:
+                    g['genres'].append(row[0])
+
+            g['platforms'] = []
+            with self.connection.cursor() as cur:
+                cur.execute("""
+                    SELECT platform_id FROM game_platform WHERE game_id = %s
+                """, (id, ))
+
+                rows = cur.fetchall()
+
+                for row in rows:
+                    g['platforms'].append(row[0])        
+
+        return g        
 
     def save_game(self, g: dict) -> None:
         if g['id']:
@@ -238,3 +240,19 @@ class Connection:
                 """, (g['id'], item))
         
         self.connection.commit()
+
+    def delete_game(self, id: int) -> None:
+        with self.connection.cursor() as cur:
+            cur.execute("""
+                DELETE FROM game_genre WHERE game_id = %s
+            """, (id, ))    
+
+            cur.execute("""
+                DELETE FROM game_platform WHERE game_id = %s
+            """, (id, ))    
+
+            cur.execute("""
+                DELETE FROM games WHERE id = %s
+            """, (id, ))    
+
+        self.connection.commit()    
